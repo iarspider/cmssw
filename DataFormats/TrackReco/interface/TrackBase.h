@@ -62,10 +62,10 @@ namespace reco {
   class TrackBase {
   public:
     /// parameter dimension
-    enum { dimension = 5 };
+    constexpr int dimension = 5;
 
     /// error matrix size
-    enum { covarianceSize = dimension * (dimension + 1) / 2 };
+    constexpr int covarianceSize = dimension * (dimension + 1) / 2;
 
     /// parameter vector
     typedef math::Vector<dimension>::type ParameterVector;
@@ -80,65 +80,66 @@ namespace reco {
     typedef math::XYZPoint Point;
 
     /// enumerator provided indices to the five parameters
-    enum { i_qoverp = 0, i_lambda, i_phi, i_dxy, i_dsz };
+    constexpr int i_qoverp = 0, i_lambda = 1, i_phi = 2, i_dxy = 3, i_dsz = 4;
 
     /// index type
     typedef unsigned int index;
 
     /// track algorithm
-    enum TrackAlgorithm {
-      undefAlgorithm = 0,
-      ctf = 1,
-      duplicateMerge = 2,
-      cosmics = 3,
-      initialStep = 4,
-      lowPtTripletStep = 5,
-      pixelPairStep = 6,
-      detachedTripletStep = 7,
-      mixedTripletStep = 8,
-      pixelLessStep = 9,
-      tobTecStep = 10,
-      jetCoreRegionalStep = 11,
-      conversionStep = 12,
-      muonSeededStepInOut = 13,
-      muonSeededStepOutIn = 14,
-      outInEcalSeededConv = 15,
-      inOutEcalSeededConv = 16,
-      nuclInter = 17,
-      standAloneMuon = 18,
-      globalMuon = 19,
-      cosmicStandAloneMuon = 20,
-      cosmicGlobalMuon = 21,
+    class TrackAlgorithm {
+    public:
+      static constexpr int undefAlgorithm = 0;
+      static constexpr int ctf = 1;
+      static constexpr int duplicateMerge = 2;
+      static constexpr int cosmics = 3;
+      static constexpr int initialStep = 4;
+      static constexpr int lowPtTripletStep = 5;
+      static constexpr int pixelPairStep = 6;
+      static constexpr int detachedTripletStep = 7;
+      static constexpr int mixedTripletStep = 8;
+      static constexpr int pixelLessStep = 9;
+      static constexpr int tobTecStep = 10;
+      static constexpr int jetCoreRegionalStep = 11;
+      static constexpr int conversionStep = 12;
+      static constexpr int muonSeededStepInOut = 13;
+      static constexpr int muonSeededStepOutIn = 14;
+      static constexpr int outInEcalSeededConv = 15;
+      static constexpr int inOutEcalSeededConv = 16;
+      static constexpr int nuclInter = 17;
+      static constexpr int standAloneMuon = 18;
+      static constexpr int globalMuon = 19;
+      static constexpr int cosmicStandAloneMuon = 20;
+      static constexpr int cosmicGlobalMuon = 21;
       // Phase1
-      highPtTripletStep = 22,
-      lowPtQuadStep = 23,
-      detachedQuadStep = 24,
-      displacedGeneralStep = 25,
-      displacedRegionalStep = 26,
-      bTagGhostTracks = 27,
-      beamhalo = 28,
-      gsf = 29,
+      static constexpr int highPtTripletStep = 22;
+      static constexpr int lowPtQuadStep = 23;
+      static constexpr int detachedQuadStep = 24;
+      static constexpr int displacedGeneralStep = 25;
+      static constexpr int displacedRegionalStep = 26;
+      static constexpr int bTagGhostTracks = 27;
+      static constexpr int beamhalo = 28;
+      static constexpr int gsf = 29;
       // HLT algo name
-      hltPixel = 30,
+      static constexpr int hltPixel = 30;
       // steps used by PF
-      hltIter0 = 31,
-      hltIter1 = 32,
-      hltIter2 = 33,
-      hltIter3 = 34,
-      hltIter4 = 35,
+      static constexpr int hltIter0 = 31;
+      static constexpr int hltIter1 = 32;
+      static constexpr int hltIter2 = 33;
+      static constexpr int hltIter3 = 34;
+      static constexpr int hltIter4 = 35;
       // steps used by all other objects @HLT
-      hltIterX = 36,
+      static constexpr int hltIterX = 36;
       // steps used by HI muon regional iterative tracking
-      hiRegitMuInitialStep = 37,
-      hiRegitMuLowPtTripletStep = 38,
-      hiRegitMuPixelPairStep = 39,
-      hiRegitMuDetachedTripletStep = 40,
-      hiRegitMuMixedTripletStep = 41,
-      hiRegitMuPixelLessStep = 42,
-      hiRegitMuTobTecStep = 43,
-      hiRegitMuMuonSeededStepInOut = 44,
-      hiRegitMuMuonSeededStepOutIn = 45,
-      algoSize = 46
+      static constexpr int hiRegitMuInitialStep = 37;
+      static constexpr int hiRegitMuLowPtTripletStep = 38;
+      static constexpr int hiRegitMuPixelPairStep = 39;
+      static constexpr int hiRegitMuDetachedTripletStep = 40;
+      static constexpr int hiRegitMuMixedTripletStep = 41;
+      static constexpr int hiRegitMuPixelLessStep = 42;
+      static constexpr int hiRegitMuTobTecStep = 43;
+      static constexpr int hiRegitMuMuonSeededStepInOut = 44;
+      static constexpr int hiRegitMuMuonSeededStepOutIn = 45;
+      static constexpr int algoSize = 46
     };
 
     /// algo mask
@@ -147,17 +148,18 @@ namespace reco {
     static const std::string algoNames[];
 
     /// track quality
-    enum TrackQuality {
-      undefQuality = -1,
-      loose = 0,
-      tight = 1,
-      highPurity = 2,
-      confirmed = 3,      // means found by more than one iteration
-      goodIterative = 4,  // meaningless
-      looseSetWithPV = 5,
-      highPuritySetWithPV = 6,
-      discarded = 7,  // because a better track found. kept in the collection for reference....
-      qualitySize = 8
+    class TrackQuality {
+    public:
+      static constexpr int undefQuality = -1;
+      static constexpr int loose = 0;
+      static constexpr int tight = 1;
+      static constexpr int highPurity = 2;
+      static constexpr int confirmed = 3;      // means found by more than one iteration
+      static constexpr int goodIterative = 4;  // meaningless
+      static constexpr int looseSetWithPV = 5;
+      static constexpr int highPuritySetWithPV = 6;
+      static constexpr int discarded = 7;  // because a better track found. kept in the collection for reference....
+      static constexpr int qualitySize = 8;
     };
 
     static const std::string qualityNames[];
