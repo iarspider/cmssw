@@ -103,7 +103,7 @@ process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(1)
 #----------------------------
 
 if (process.runType.getRunType() == process.runType.pp_run):
-    print "Running pp "
+    print("Running pp ")
 
     process.EventStreamHttpReader.SelectEvents = cms.untracked.PSet(SelectEvents = cms.vstring('HLT_L1*',
                                                                                            'HLT_Jet*',
@@ -118,7 +118,7 @@ if (process.runType.getRunType() == process.runType.pp_run):
     #----------------------------
     # pixelVertexDQM Configuration
     #----------------------------
-from DQMServices.Core.DQMEDAnalyzer import DQMEDAnalyzer
+    from DQMServices.Core.DQMEDAnalyzer import DQMEDAnalyzer
     process.pixelVertexDQM = DQMEDAnalyzer('Vx3DHLTAnalyzer',
                                             vertexCollection = cms.InputTag("pixelVertices"),
                                             debugMode        = cms.bool(True),
@@ -206,4 +206,4 @@ process.source = cms.Source(
   skipBadFiles = cms.untracked.bool(True),  
 )
 
-#print process.dumpPython()
+#print(process.dumpPython())

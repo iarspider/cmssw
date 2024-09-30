@@ -21,8 +21,8 @@ except:
 
 gROOT.Reset()
 
-gSystem.AddIncludePath(" -I$CMSSW_BASE/src/RecoVertex/BeamSpotProducer/interface");
-gSystem.AddIncludePath(" -I$CMSSW_BASE/src");
+gSystem.AddIncludePath(" -I$CMSSW_BASE/src/RecoVertex/BeamSpotProducer/interface")
+gSystem.AddIncludePath(" -I$CMSSW_BASE/src")
 #gSystem.AddLinkedLibs(" -L$CMSSW_BASE/lib/$SCRAM_ARCH -lRecoVertexBeamSpotProducer");
 
 gROOT.SetMacroPath("$CMSSW_BASE/src/:.")
@@ -107,39 +107,39 @@ def Fit3D( pvStore ):
     minuitx.CreateMinimizer()
     ierr = minuitx.Minimize()
     if ierr == 1:
-	print("3D beam spot fit failed in 1st iteration")
-	return (False, fbeamspot)
+        print("3D beam spot fit failed in 1st iteration")
+        return (False, fbeamspot)
     
     # refit with harder selection on vertices
     
     fcn.setLimits(minuitx.GetParameter(0)-sigmaCut_*minuitx.GetParameter(3),
-		   minuitx.GetParameter(0)+sigmaCut_*minuitx.GetParameter(3),
-		   minuitx.GetParameter(1)-sigmaCut_*minuitx.GetParameter(5),
-		   minuitx.GetParameter(1)+sigmaCut_*minuitx.GetParameter(5),
-		   minuitx.GetParameter(2)-sigmaCut_*minuitx.GetParameter(8),
-		   minuitx.GetParameter(2)+sigmaCut_*minuitx.GetParameter(8));
-    ierr = minuitx.Minimize();
+                   minuitx.GetParameter(0)+sigmaCut_*minuitx.GetParameter(3),
+                   minuitx.GetParameter(1)-sigmaCut_*minuitx.GetParameter(5),
+                   minuitx.GetParameter(1)+sigmaCut_*minuitx.GetParameter(5),
+                   minuitx.GetParameter(2)-sigmaCut_*minuitx.GetParameter(8),
+                   minuitx.GetParameter(2)+sigmaCut_*minuitx.GetParameter(8))
+    ierr = minuitx.Minimize()
     if ierr == 1:
-	print("3D beam spot fit failed in 2nd iteration")
-	return (False, fbeamspot)
+        print("3D beam spot fit failed in 2nd iteration")
+        return (False, fbeamspot)
     
     # refit with correlations
     
-    minuitx.ReleaseParameter(4);
-    minuitx.ReleaseParameter(6);
-    minuitx.ReleaseParameter(7);
-    ierr = minuitx.Minimize();
+    minuitx.ReleaseParameter(4)
+    minuitx.ReleaseParameter(6)
+    minuitx.ReleaseParameter(7)
+    ierr = minuitx.Minimize()
     if ierr == 1:
-	print("3D beam spot fit failed in 3rd iteration")
-	return (False, fbeamspot)
+        print("3D beam spot fit failed in 3rd iteration")
+        return (False, fbeamspot)
     # store results
 
-    fbeamspot.beamWidthX = minuitx.GetParameter(3);
-    fbeamspot.beamWidthY = minuitx.GetParameter(5);
-    fbeamspot.sigmaZ = minuitx.GetParameter(8);
-    fbeamspot.beamWidthXerr = minuitx.GetParError(3);
-    fbeamspot.beamWidthYerr = minuitx.GetParError(5);
-    fbeamspot.sigmaZerr = minuitx.GetParError(8);
+    fbeamspot.beamWidthX = minuitx.GetParameter(3)
+    fbeamspot.beamWidthY = minuitx.GetParameter(5)
+    fbeamspot.sigmaZ = minuitx.GetParameter(8)
+    fbeamspot.beamWidthXerr = minuitx.GetParError(3)
+    fbeamspot.beamWidthYerr = minuitx.GetParError(5)
+    fbeamspot.sigmaZerr = minuitx.GetParError(8)
     fbeamspot.X = minuitx.GetParameter(0)
     fbeamspot.Y = minuitx.GetParameter(1)
     fbeamspot.Z = minuitx.GetParameter(2)
@@ -165,7 +165,7 @@ def main():
     
     aData = BeamSpotTreeData()
     
-    aData.setBranchAddress(fchain);
+    aData.setBranchAddress(fchain)
     
     histox = {}
     histoy = {}
@@ -178,51 +178,51 @@ def main():
     pvStore = ROOT.vector( BeamSpotFitPVData )(0)
 
     for jentry in range( entries ):
-	# get the next tree in the chain
-	ientry = fchain.LoadTree(jentry)
-	if ientry < 0:
-	    break
+        # get the next tree in the chain
+        ientry = fchain.LoadTree(jentry)
+        if ientry < 0:
+            break
 
-	# verify file/tree/chain integrity
-	nb = fchain.GetEntry( jentry )
-	if nb <= 0 or not hasattr( fchain, 'lumi' ):
-	    continue
+        # verify file/tree/chain integrity
+        nb = fchain.GetEntry( jentry )
+        if nb <= 0 or not hasattr( fchain, 'lumi' ):
+            continue
 
     
     #run = int( fchain.bunchCrossing )
     #lumi = int( fchain.lumi )
     #bx = int( fchain.bunchCrossing )
-	run = aData.getRun()
-	if ientry == 0 :
-	    therun = run
-	if run != therun:
-	    print("FILES WITH DIFFERENT RUNS?? "+str(runt) + " and "+str(therun))
-	    break
+        run = aData.getRun()
+        if ientry == 0 :
+            therun = run
+        if run != therun:
+            print("FILES WITH DIFFERENT RUNS?? "+str(runt) + " and "+str(therun))
+            break
 
-	pvdata = aData.getPvData()
+        pvdata = aData.getPvData()
     
-	bx = int( pvdata.bunchCrossing )
-	histobx.Fill(bx)
-	lumi = aData.getLumi()
-	histolumi.Fill(lumi)
+        bx = int( pvdata.bunchCrossing )
+        histobx.Fill(bx)
+        lumi = aData.getLumi()
+        histolumi.Fill(lumi)
 
-	pvx = pvdata.position[0]
-	pvy = pvdata.position[1]
-	pvz = pvdata.position[2]
+        pvx = pvdata.position[0]
+        pvy = pvdata.position[1]
+        pvz = pvdata.position[2]
 
-	if (bx in histox) == False:
-	    print("bx: "+str(bx))
-	    histox[bx] = TH2F("x_"+str(bx),"x_"+str(bx),100,0,0.2,300,0,1500)#TH1F("x_"+str(bx),"x_"+str(bx),100,0,0.2)
-	    histoy[bx] = TH1F("y_"+str(bx),"y_"+str(bx),100,0,0.2)
-	    histoz[bx] = TH1F("z_"+str(bx),"z_"+str(bx),100,0,0.2)
+        if (bx in histox) == False:
+            print("bx: "+str(bx))
+            histox[bx] = TH2F("x_"+str(bx),"x_"+str(bx),100,0,0.2,300,0,1500)#TH1F("x_"+str(bx),"x_"+str(bx),100,0,0.2)
+            histoy[bx] = TH1F("y_"+str(bx),"y_"+str(bx),100,0,0.2)
+            histoz[bx] = TH1F("z_"+str(bx),"z_"+str(bx),100,0,0.2)
 
-	histox[bx].Fill(pvx,lumi)
-	histoy[bx].Fill(pvy)
-	histoz[bx].Fill(pvz)
+        histox[bx].Fill(pvx,lumi)
+        histoy[bx].Fill(pvy)
+        histoz[bx].Fill(pvz)
     
-    	pvStore.push_back( pvdata )
+        pvStore.push_back( pvdata )
         #if ientry > 10:
-	#break
+        #break
 
     # fit
     results = Fit3D( pvStore )
@@ -247,16 +247,16 @@ def main():
 
     i = 0
     for ibx in histox.keys():
-	if i==0:
-	    t1 = histox[ibx].ProjectionX("xall_"+str(ibx))
-	    t1.Draw()
-	else:
-	    t1 = histox[ibx].ProjectionX("xall_"+str(ibx))
-	    t1.Draw("same")
+        if i==0:
+            t1 = histox[ibx].ProjectionX("xall_"+str(ibx))
+            t1.Draw()
+        else:
+            t1 = histox[ibx].ProjectionX("xall_"+str(ibx))
+            t1.Draw("same")
 
-	i =+ 1
+        i =+ 1
     
-    raw_input ("Enter to quit:")
+    input ("Enter to quit:")
 
 
 if __name__ == "__main__":

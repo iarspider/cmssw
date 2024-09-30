@@ -181,7 +181,7 @@ def do_validation(samples, GlobalTag, trackquality, trackalgorithm):
         templatemacroFile = open(macro, 'r')
 #        newdir=NewRepository+'/'+NewRelease+'/'+NewSelection+'/'+sample 
         newdir=NewRelease+'/'+NewSelection+'/'+sample 
-	cfgFileName=sample+GlobalTag
+        cfgFileName=sample+GlobalTag
         #check if the sample is already done
         if(os.path.isfile(newdir+'/building.pdf' )!=True):    
 

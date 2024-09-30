@@ -74,7 +74,7 @@ process.phystrigger = cms.Sequence(
 #----------------------------
 
 if (process.runType.getRunType() == process.runType.pp_run or process.runType.getRunType() == process.runType.cosmic_run):
-    print "Running pp "
+    print("Running pp ")
 
     process.EventStreamHttpReader.SelectEvents = cms.untracked.PSet(SelectEvents = cms.vstring('HLT_L1*',
                                                                                            'HLT_Jet*',
@@ -89,7 +89,7 @@ if (process.runType.getRunType() == process.runType.pp_run or process.runType.ge
     #----------------------------
     # pixelVertexDQM Configuration
     #----------------------------
-from DQMServices.Core.DQMEDAnalyzer import DQMEDAnalyzer
+    from DQMServices.Core.DQMEDAnalyzer import DQMEDAnalyzer
     process.pixelVertexDQM = DQMEDAnalyzer('Vx3DHLTAnalyzer',
                                             vertexCollection = cms.InputTag("pixelVertices"),
                                             debugMode        = cms.bool(True),

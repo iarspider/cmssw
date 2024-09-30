@@ -71,7 +71,7 @@ process.phystrigger = cms.Sequence(
 # Proton-Proton Stuff
 #----------------------------
 if (process.runType.getRunType() == process.runType.pp_run or process.runType.getRunType() == process.runType.cosmic_run):
-    print "Running pp paths"
+    print("Running pp paths")
 
     process.EventStreamHttpReader.consumerName = "Beam Pixel DQM Consumer"
     process.EventStreamHttpReader.SelectEvents = cms.untracked.PSet(SelectEvents = cms.vstring('HLT_L1*',
@@ -83,7 +83,7 @@ if (process.runType.getRunType() == process.runType.pp_run or process.runType.ge
                                                                                               'HLT_ZeroBias*'))
     process.load("Configuration.StandardSequences.Reconstruction_cff") ## pp reco sequence
 
-from DQMServices.Core.DQMEDAnalyzer import DQMEDAnalyzer
+    from DQMServices.Core.DQMEDAnalyzer import DQMEDAnalyzer
     process.pixelVertexDQM = DQMEDAnalyzer('Vx3DHLTAnalyzer',
                                             vertexCollection = cms.InputTag("pixelVertices"),
                                             debugMode        = cms.bool(True),

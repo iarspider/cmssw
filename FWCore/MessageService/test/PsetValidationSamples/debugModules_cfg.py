@@ -56,7 +56,7 @@ process.MessageLogger = cms.Service("MessageLogger",
     ),
     u1_default = cms.untracked.PSet(
         noTimeStamps = cms.untracked.bool(True),
-        enableStatistics = cms.untracked.bool(True)
+        enableStatistics = cms.untracked.bool(True),
         FwkTest = cms.untracked.PSet(
             limit = cms.untracked.int32(0)
         ),

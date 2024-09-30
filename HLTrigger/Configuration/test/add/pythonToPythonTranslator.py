@@ -191,25 +191,25 @@ parseModules(theProcess)
 # now dump it to the screen as wanted by the HLT parser
 hltAcceptedOrder = ['main_input','looper', 'psets', 'modules', 'es_modules', 'es_sources', 'es_prefers', 'output_modules', 'sequences', 'paths', 'endpaths', 'services', 'schedule']
 
-print '{'
-print "'procname': '%s'" %result['procname']
+print('{')
+print("'procname': '%s'" %result['procname'])
 
 for key in hltAcceptedOrder:
     if key in ('output_modules', 'schedule'):
-        print ", '%s': %s" %(key, result[key])
+        print(", '%s': %s" %(key, result[key]))
     elif key in ('main_input',):
-        print ", '%s':  {" % key
+        print(", '%s':  {" % key)
         # in case no source is defined, leave an empty block in the output
         if result[key] is not None:
-            print str(dumpObject(result[key], key))[1:-1]
-        print '} # end of %s' % key
+            print(str(dumpObject(result[key], key))[1:-1])
+        print('} \# end of %s' % key)
     else:
-        print ", '%s':  {" % key
+        print(", '%s':  {" % key)
         comma = ''
         for name,object in result[key].items():
-            print comma+"'%s': %s" %(name, dumpObject(object,key))
+            print(comma+"'%s': %s" %(name, dumpObject(object,key)))
             comma = ', '
-        print '} # end of %s' % key
+        print('} \# end of %s' % key)
 
-print '}'
+print('}')
 

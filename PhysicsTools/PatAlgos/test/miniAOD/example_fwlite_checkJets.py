@@ -37,7 +37,7 @@ count= 0
 for event in events:
     count+=1 
     if count % 1000 == 0 :
-	print(count)
+        print(count)
     event.getByLabel (labelGJ1, handleGJ1)
     event.getByLabel (labelGJ2, handleGJ2)
     event.getByLabel (labelGP, handleGP)
@@ -46,18 +46,18 @@ for event in events:
     jets2 = handleGJ2.product()
     
     for j1,j2 in zip(jets1,jets2)  :
-            if abs(j1.eta()) < 2.5 and j1.pt() > 20 and j1.chargedHadronEnergyFraction() > 0.05 :
-		if abs(j1.pt()-j2.pt())/(j1.pt()+j2.pt()) >0.05 :
-			print("Mismatch at record ", count)
-			print("Bad match is : pt %s vs %s, b-tag %s vs %s, MC flavour %s vs %s " %(j1.pt(),j2.pt(),j1.bDiscriminator("combinedSecondaryVertexBJetTags"),j2.bDiscriminator("combinedSecondaryVertexBJetTags"),j1.partonFlavour(),j2.partonFlavour()))
-			print("Jet eta and phi" ,j1.eta(),j1.phi())
-			print(" alljets ")
-   		        for j11,j22 in zip(jets1,jets2)  :
-	                        print("  Jet pt %s vs %s, b-tag %s vs %s, MC flavour %s vs %s " % (j11.pt(),j22.pt(),j11.bDiscriminator("combinedSecondaryVertexBJetTags"),j22.bDiscriminator("combinedSecondaryVertexBJetTags"),j11.partonFlavour(),j22.partonFlavour()))
-	#		print "gen parts"
-	#		genparts = handleGP.product()
-	#		for gp in genparts :
-	#			if abs(gp.eta()-j1.eta()) < 0.3 :
-	#				print deltaR(j1.p4(),gp.p4()),gp.pdgId(),gp.status(),gp.pt(),gp.eta(),gp.phi()
+        if abs(j1.eta()) < 2.5 and j1.pt() > 20 and j1.chargedHadronEnergyFraction() > 0.05 :
+            if abs(j1.pt()-j2.pt())/(j1.pt()+j2.pt()) >0.05 :
+                print("Mismatch at record ", count)
+                print("Bad match is : pt %s vs %s, b-tag %s vs %s, MC flavour %s vs %s " %(j1.pt(),j2.pt(),j1.bDiscriminator("combinedSecondaryVertexBJetTags"),j2.bDiscriminator("combinedSecondaryVertexBJetTags"),j1.partonFlavour(),j2.partonFlavour()))
+                print("Jet eta and phi" ,j1.eta(),j1.phi())
+                print(" alljets ")
+                for j11,j22 in zip(jets1,jets2):
+                    print("  Jet pt %s vs %s, b-tag %s vs %s, MC flavour %s vs %s " % (j11.pt(),j22.pt(),j11.bDiscriminator("combinedSecondaryVertexBJetTags"),j22.bDiscriminator("combinedSecondaryVertexBJetTags"),j11.partonFlavour(),j22.partonFlavour()))
+    #        print("gen parts")
+    #        genparts = handleGP.product()
+    #        for gp in genparts :
+    #            if abs(gp.eta()-j1.eta()) < 0.3 :
+    #                print(deltaR(j1.p4(),gp.p4()),gp.pdgId(),gp.status(),gp.pt(),gp.eta(),gp.phi())
     
 

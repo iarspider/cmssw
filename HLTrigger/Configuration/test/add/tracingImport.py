@@ -8,7 +8,7 @@ customised version:
    in the order in which they are defined
 """
 
-import sys, imp, 
+import sys, imp
 import builtins
 import re
 

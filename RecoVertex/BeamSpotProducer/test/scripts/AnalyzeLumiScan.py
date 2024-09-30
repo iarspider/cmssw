@@ -40,7 +40,7 @@ def get_list_files(run,ls1,ls2,mode):
     elif mode == 1: ## lxplus
         prefix="rfio:/castor/cern.ch/cms"
     elif mode == 2: ## cmslpc
-	prefix="dcache:/pnfs/cms/WAX/11"
+        prefix="dcache:/pnfs/cms/WAX/11"
     else:
         print("Mode = "+str(mode)+" is not supported")
 
@@ -74,8 +74,8 @@ def main():
     elif mode == "lxplus":
         fmode = 1
     elif mode == "cmslpc":
-	fmode = 2
-	jobmode = "local" ## temporary
+        fmode = 2
+        jobmode = "local" ## temporary
     else:
         print("Mode not supported")
         sys.exit()
