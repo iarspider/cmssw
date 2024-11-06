@@ -37,7 +37,7 @@ namespace clangcms {
     return reportGeneral(path, BR);
   }
 
-  bool CmsException::reportMutableMember(clang::QualType const& t,
+  bool CmsException::reportMutableMember(/*clang::QualType const& t, -- unused */
                                          clang::ento::PathDiagnosticLocation const& path,
                                          clang::ento::BugReporter& BR) const {
     return reportGeneral(path, BR);
