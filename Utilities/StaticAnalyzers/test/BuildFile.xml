@@ -1,0 +1,33 @@
+<bin file="class_checker.cpp">
+  <flags CXXFLAGS="-Wno-error=unused-variable -Wno-error=reorder -Wno-error=unused-but-set-variable"/>
+  <flags CXXFLAGS="-Wno-unused-variable -Wno-reorder -Wno-unused-but-set-variable"/>
+</bin>
+<bin file="const_cast_away.cpp">
+  <flags CXXFLAGS="-Wno-error=unused-variable -Wno-error=reorder -Wno-error=unused-but-set-variable"/>
+  <flags CXXFLAGS="-Wno-unused-variable -Wno-reorder -Wno-unused-but-set-variable"/>
+</bin>
+<bin file="const_cast.cpp">
+  <flags CXXFLAGS="-Wno-error=unused-variable -Wno-error=reorder -Wno-error=unused-but-set-variable"/>
+  <flags CXXFLAGS="-Wno-unused-variable -Wno-reorder -Wno-unused-but-set-variable"/>
+</bin>
+<bin file="func_checker.cpp">
+  <flags CXXFLAGS="-Wno-error=unused-variable -Wno-error=reorder -Wno-error=unused-but-set-variable"/>
+  <flags CXXFLAGS="-Wno-unused-variable -Wno-reorder -Wno-unused-but-set-variable"/>
+</bin>
+<bin file="global_static.cpp">
+  <flags CXXFLAGS="-Wno-error=unused-variable -Wno-error=reorder -Wno-error=unused-but-set-variable"/>
+  <flags CXXFLAGS="-Wno-unused-variable -Wno-reorder -Wno-unused-but-set-variable"/>
+</bin>
+<bin file="global_static_edm.cpp">
+  <flags CXXFLAGS="-Wno-error=unused-variable -Wno-error=reorder -Wno-error=unused-but-set-variable"/>
+  <flags CXXFLAGS="-Wno-unused-variable -Wno-reorder -Wno-unused-but-set-variable"/>
+</bin>
+<bin file="mutable_member.cpp">
+  <flags CXXFLAGS="-Wno-error=unused-variable -Wno-error=reorder -Wno-error=unused-but-set-variable"/>
+  <flags CXXFLAGS="-Wno-unused-variable -Wno-reorder -Wno-unused-but-set-variable"/>
+</bin>
+<bin file="static_local.cpp">
+  <flags CXXFLAGS="-Wno-error=unused-variable -Wno-error=reorder -Wno-error=unused-but-set-variable"/>
+  <flags CXXFLAGS="-Wno-unused-variable -Wno-reorder -Wno-unused-but-set-variable"/>
+</bin>
+<test name="testLLVMAnalyzers" command="run_static_checks.sh"/>
