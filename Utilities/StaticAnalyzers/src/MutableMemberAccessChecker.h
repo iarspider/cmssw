@@ -15,17 +15,29 @@
 #include "CmsSupport.h"
 
 namespace clangcms {
-  class MutableMemberAccessChecker : public clang::ento::Checker<clang::ento::check::PreStmt<clang::MemberExpr>> {
+  class MutableMemberChecker : public clang::ento::Checker<clang::ento::check::ASTDecl<clang::FieldDecl>,
+                                                           clang::ento::check::PreStmt<clang::MemberExpr>,
+                                                           clang::ento::check::EndAnalysis> {
+  private:
+    mutable llvm::DenseSet<const clang::FieldDecl *> MutableMembers;
+    mutable llvm::DenseSet<const clang::FieldDecl *> ModifiedMutableMembers;
+
   public:
     CMS_SA_ALLOW mutable std::unique_ptr<clang::ento::BugType> BT;
     void checkPreStmt(const clang::MemberExpr *ME, clang::ento::CheckerContext &C) const;
+    void checkASTDecl(const clang::FieldDecl *D, clang::ento::AnalysisManager &Mgr, clang::ento::BugReporter &BR) const;
+    void checkEndAnalysis(clang::ento::ExplodedGraph &G,
+                          clang::ento::BugReporter &BR,
+                          clang::ento::ExprEngine &Eng) const;
 
   private:
     CmsException m_exception;
     bool checkAssignToMutable(const clang::MemberExpr *ME,
                               clang::ento::CheckerContext &C,
-                              const clang::FunctionDecl *FuncD) const;
-    bool checkCallNonConstOfMutable(const clang::MemberExpr *ME, clang::ento::CheckerContext &C) const;
+                              const clang::FunctionDecl *FuncD,
+                              bool report) const;
+    bool checkCallNonConstOfMutable(const clang::MemberExpr *ME, clang::ento::CheckerContext &C, bool report) const;
+    void reportUselessMutableField(const clang::FieldDecl *Field, clang::ento::BugReporter &BR) const;
   };
 }  // namespace clangcms
 

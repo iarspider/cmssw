@@ -6,7 +6,7 @@
 export CMS_BOT_DIR=$WORKSPACE/cms-bot
 
 rm -rf $WORKSPACE/llvm-analysis-test; mkdir $WORKSPACE/llvm-analysis-test
-pushd $CMSSW_BASE/src/Utilities/StaticAnalyzers
+pushd $CMSSW_BASE/src/Utilities/StaticAnalyzers/test
 USER_CXXFLAGS='-Wno-register -DEDM_ML_DEBUG -w' SCRAM_IGNORE_PACKAGES="Fireworks/%" USER_LLVM_CHECKERS="-enable-checker threadsafety -enable-checker cms -enable-checker deprecated -disable-checker cms.FunctionDumper" \
     scram b -v -k -j ${NCPU2} checker >$WORKSPACE/llvm-analysis-test/runStaticChecks.log 2>&1 || true
 popd

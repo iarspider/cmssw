@@ -1,4 +1,4 @@
-//== PublicMutableChecker.h - Checks for removed const qualfiers --------------*- C++ -*--==//
+//== PublicMutableChecker.h - Checks for public mutable members --------------*- C++ -*--==//
 //
 // Check for public mutable members
 //

@@ -1,6 +1,6 @@
-//== MutableMemberAccessChecker.cpp - Checks for accessing mutable members via const pointer --------------*- C++ -*--==//
+//== MutableMemberChecker.cpp - Checks for accessing mutable members via const pointer --------------*- C++ -*--==//
 //
-// By Ivan Razumov <ivan.razumov@cern.ch>
+// By Thomas Hauth [ Thomas.Hauth@cern.ch ], updated by Ivan Razumov <ivan.razumov@cern.ch>
 //
 //===----------------------------------------------------------------------===//
 
@@ -13,8 +13,9 @@
 #include <clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h>
 
 namespace clangcms {
-  void MutableMemberAccessChecker::checkPreStmt(const clang::MemberExpr *ME, clang::ento::CheckerContext &C) const {
+  void MutableMemberChecker::checkPreStmt(const clang::MemberExpr *ME, clang::ento::CheckerContext &C) const {
     // Common checks
+    bool shouldReport = true;
 
     // == Filter out classes with "safe" names ==
     const auto *RD = llvm::dyn_cast<clang::CXXRecordDecl>(ME->getMemberDecl()->getDeclContext());
@@ -31,7 +32,7 @@ namespace clangcms {
     for (const auto *A : Attrs) {
       if (clang::isa<clang::CMSThreadGuardAttr>(A) || clang::isa<clang::CMSThreadSafeAttr>(A) ||
           clang::isa<clang::CMSSaAllowAttr>(A)) {
-        return;  // Attribute found, do not emit an error.
+        shouldReport = false;
       }
     }
 
@@ -54,20 +55,15 @@ namespace clangcms {
     }
 
     // == Check if we are inside a const-qualified member function ==
-    bool isInConstMemberFunc = false;
     const auto *MethodDecl = llvm::dyn_cast<clang::CXXMethodDecl>(FuncD);
-    if (MethodDecl && MethodDecl->isConst()) {
-      isInConstMemberFunc = true;
-    }
-
-    if (!isInConstMemberFunc) {
+    if (!MethodDecl || !MethodDecl->isConst()) {
       return;
     }
 
     bool ret;
-    ret = checkAssignToMutable(ME, C, FuncD);
+    ret = checkAssignToMutable(ME, C, FuncD, shouldReport);
     if (!ret)
-      ret = checkCallNonConstOfMutable(ME, C);
+      ret = checkCallNonConstOfMutable(ME, C, shouldReport);
 
     if (ret) {
       if (RD) {
@@ -78,14 +74,16 @@ namespace clangcms {
         std::string ostring = "flagged class '" + ClassName + "' modifying mutable member '" + MemberName +
                               "' in function '" + FunctionName + "'";
         support::writeLog(ostring, tname);
+        ModifiedMutableMembers.insert(FD);
       }
     }
   }  // checkPreStmt
 
   // Check direct modifications of mutable (assign, compound stmt, increment/decrement)
-  bool MutableMemberAccessChecker::checkAssignToMutable(const clang::MemberExpr *ME,
-                                                        clang::ento::CheckerContext &C,
-                                                        const clang::FunctionDecl *FuncD) const {
+  bool MutableMemberChecker::checkAssignToMutable(const clang::MemberExpr *ME,
+                                                  clang::ento::CheckerContext &C,
+                                                  const clang::FunctionDecl *FuncD,
+                                                  bool report) const {
     // == Check if this is a modifying statement ==
     bool isModification = false;
 
@@ -117,39 +115,43 @@ namespace clangcms {
       return false;
     }
 
-    // == Report a bug if none of the above conditions allow access. ==
-    if (!BT) {
-      BT = std::make_unique<clang::ento::BugType>(
-          this, "Mutable member modification in const member function", "ConstThreadSafety");
+    if (report) {
+      // == Report a bug if none of the above conditions allow access. ==
+      if (!BT) {
+        BT = std::make_unique<clang::ento::BugType>(
+            this, "Mutable member modification in const member function", "ConstThreadSafety");
+      }
+      auto Report = std::make_unique<clang::ento::PathSensitiveBugReport>(
+          *BT, "Modifying mutable member in const member function is potentially thread-unsafe", C.generateErrorNode());
+      Report->addRange(ME->getSourceRange());
+      C.emitReport(std::move(Report));
     }
-    auto Report = std::make_unique<clang::ento::PathSensitiveBugReport>(
-        *BT, "Modifying mutable member in const member function is potentially thread-unsafe", C.generateErrorNode());
-    Report->addRange(ME->getSourceRange());
-    C.emitReport(std::move(Report));
-
     return true;
   }  // checkAssignToMutable
 
   // Check for indirect modifications of mutable (calling non-const method)
-  bool MutableMemberAccessChecker::checkCallNonConstOfMutable(const clang::MemberExpr *ME,
-                                                              clang::ento::CheckerContext &C) const {
+  bool MutableMemberChecker::checkCallNonConstOfMutable(const clang::MemberExpr *ME,
+                                                        clang::ento::CheckerContext &C,
+                                                        bool report) const {
     // Traverse upwards to check if the MemberExpr is part of a CXXMemberCallExpr
     const clang::Expr *E = ME;
     while (E) {
       if (const clang::CXXMemberCallExpr *Call = llvm::dyn_cast<clang::CXXMemberCallExpr>(E->IgnoreParenCasts())) {
         const clang::CXXMethodDecl *CalledMethod = Call->getMethodDecl();
         if (CalledMethod && !CalledMethod->isConst()) {
-          // Report an issue
-          if (!BT) {
-            BT = std::make_unique<clang::ento::BugType>(
-                this, "Mutable member modification in const member function", "ConstThreadSafety");
+          if (report) {
+            // Report an issue
+            if (!BT) {
+              BT = std::make_unique<clang::ento::BugType>(
+                  this, "Mutable member modification in const member function", "ConstThreadSafety");
+            }
+            auto Report = std::make_unique<clang::ento::PathSensitiveBugReport>(
+                *BT,
+                "Modifying mutable member in const member function is potentially thread-unsafe",
+                C.generateErrorNode());
+            Report->addRange(ME->getSourceRange());
+            C.emitReport(std::move(Report));
           }
-          auto Report = std::make_unique<clang::ento::PathSensitiveBugReport>(
-              *BT,
-              "Modifying mutable member in const member function is potentially thread-unsafe",
-              C.generateErrorNode());
-          Report->addRange(ME->getSourceRange());
-          C.emitReport(std::move(Report));
           return true;
         }
       }
@@ -158,5 +160,39 @@ namespace clangcms {
       E = llvm::dyn_cast_or_null<clang::Expr>(ParentStmt);
     }
     return false;
+  }  // checkCallNonConstOfMutable
+
+  void MutableMemberChecker::checkASTDecl(const clang::FieldDecl *D,
+                                          clang::ento::AnalysisManager &Mgr,
+                                          clang::ento::BugReporter &BR) const {
+    if (D->isMutable()) {
+      MutableMembers.insert(D);
+    }
+  }  // checkASTDecl
+
+  void MutableMemberChecker::checkEndAnalysis(clang::ento::ExplodedGraph &G,
+                                              clang::ento::BugReporter &BR,
+                                              clang::ento::ExprEngine &Eng) const {
+    for (const auto *Field : MutableMembers) {
+      if (!ModifiedMutableMembers.count(Field)) {
+        reportUselessMutableField(Field, BR);
+      }
+    }
   }
+
+  void MutableMemberChecker::reportUselessMutableField(const clang::FieldDecl *Field,
+                                                       clang::ento::BugReporter &BR) const {
+    // Create a location for the diagnostic based on where the field is declared
+    clang::ento::PathDiagnosticLocation DLoc =
+        clang::ento::PathDiagnosticLocation::createBegin(Field, BR.getSourceManager());
+
+    // Emit a basic report with a message, using the field's name and location
+    BR.EmitBasicReport(Field,
+                       this,
+                       "Useless mutable field",
+                       "ConstThreadSafety",
+                       "The mutable field '" + Field->getNameAsString() + "' is not modified in any const methods",
+                       DLoc);
+  }  //reportUselessMutableField
+
 }  // namespace clangcms

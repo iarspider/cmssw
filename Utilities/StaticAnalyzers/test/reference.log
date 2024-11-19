@@ -1,6 +1,3 @@
-src/Utilities/StaticAnalyzers/bin/bloom_filter_generator.c:30:13: warning: function 'generate_bloom_filter' accesses or modifies non-const global static variable 'stderr'.
-src/Utilities/StaticAnalyzers/bin/bloom_filter_generator.c:35:13: warning: function 'generate_bloom_filter' accesses or modifies non-const global static variable 'stderr'.
-src/Utilities/StaticAnalyzers/bin/bloom_filter_generator.c:53:13: warning: function 'main' accesses or modifies non-const global static variable 'stderr'.
 src/Utilities/StaticAnalyzers/test/class_checker.cpp:108:5: warning: 1st function call argument is an uninitialized value [core.CallAndMessage]
 src/Utilities/StaticAnalyzers/test/class_checker.cpp:10:1: warning: Non-const variable 'int * g_ptr_static' is static and might be thread-unsafe [threadsafety.GlobalStatic]
 src/Utilities/StaticAnalyzers/test/class_checker.cpp:161:10: warning: Value stored to 'ip' during its initialization is never read [deadcode.DeadStores]
@@ -8,6 +5,8 @@ src/Utilities/StaticAnalyzers/test/class_checker.cpp:162:10: warning: Value stor
 src/Utilities/StaticAnalyzers/test/class_checker.cpp:167:5: warning: Non-const variable 'int & intRef' is static local or static member data and might be thread-unsafe [threadsafety.StaticLocal]
 src/Utilities/StaticAnalyzers/test/class_checker.cpp:168:5: warning: Non-const variable 'int * intPtr' is static local or static member data and might be thread-unsafe [threadsafety.StaticLocal]
 src/Utilities/StaticAnalyzers/test/class_checker.cpp:16:15: warning: Class 'ClassTest' has publically-accessible mutable member 'ClassTest::m_pubMutable', this is not allowed [threadsafety.PublicMutableMember]
+src/Utilities/StaticAnalyzers/test/class_checker.cpp:16:3: warning: The mutable field 'm_pubMutable' is not modified in any const methods [threadsafety.MutableMember]
+src/Utilities/StaticAnalyzers/test/class_checker.cpp:21:3: warning: The mutable field 'm_testMutable' is not modified in any const methods [threadsafety.MutableMember]
 src/Utilities/StaticAnalyzers/test/class_checker.cpp:28:3: warning: Modifying mutable member in const member function is potentially thread-unsafe [threadsafety.MutableMember]
 src/Utilities/StaticAnalyzers/test/const_cast.cpp:10:20: warning: const_cast was used, this may result in thread-unsafe code [threadsafety.ConstCast]
 src/Utilities/StaticAnalyzers/test/const_cast_away.cpp:10:20: warning: const qualifier was removed via a cast, this may result in thread-unsafe code [threadsafety.ConstCastAway]
@@ -26,5 +25,8 @@ src/Utilities/StaticAnalyzers/test/mutable_member.cpp:23:50: warning: Modifying 
 src/Utilities/StaticAnalyzers/test/mutable_member.cpp:24:50: warning: Modifying mutable member in const member function is potentially thread-unsafe [threadsafety.MutableMember]
 src/Utilities/StaticAnalyzers/test/mutable_member.cpp:25:50: warning: Modifying mutable member in const member function is potentially thread-unsafe [threadsafety.MutableMember]
 src/Utilities/StaticAnalyzers/test/mutable_member.cpp:29:15: warning: Class 'Foo' has publically-accessible mutable member 'Foo::badPublicMutable', this is not allowed [threadsafety.PublicMutableMember]
+src/Utilities/StaticAnalyzers/test/mutable_member.cpp:29:3: warning: The mutable field 'badPublicMutable' is not modified in any const methods [threadsafety.MutableMember]
+src/Utilities/StaticAnalyzers/test/mutable_member.cpp:32:3: warning: The mutable field 'barMutableMember' is not modified in any const methods [threadsafety.MutableMember]
+src/Utilities/StaticAnalyzers/test/mutable_member.cpp:33:3: warning: The mutable field 'privateMutable' is not modified in any const methods [threadsafety.MutableMember]
 src/Utilities/StaticAnalyzers/test/static_local.cpp:8:5: warning: Non-const variable 'int & intRef' is static local or static member data and might be thread-unsafe [threadsafety.StaticLocal]
 src/Utilities/StaticAnalyzers/test/static_local.cpp:9:5: warning: Non-const variable 'int * intPtr' is static local or static member data and might be thread-unsafe [threadsafety.StaticLocal]
