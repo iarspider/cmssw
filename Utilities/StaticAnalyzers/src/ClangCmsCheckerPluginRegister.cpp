@@ -48,7 +48,7 @@ extern "C" void clang_registerCheckers(clang::ento::CheckerRegistry &registry) {
       "Checks for non-const method local statics which might not be thread-safe",
       "no docs");
   registry.addChecker<clangcms::MutableMemberChecker>(
-      "threadsafety.MutableMember",
+      "foobar.threadsafety.MutableMember",
       "Checks for modifying members with the mutable keyword in const member functions, which might not be thread-safe",
       "no docs");
   registry.addChecker<clangcms::GlobalStaticChecker>(
