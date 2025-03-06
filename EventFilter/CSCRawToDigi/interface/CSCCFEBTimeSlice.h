@@ -54,14 +54,14 @@ public:
   CSCCFEBTimeSlice();
 
   /// input from 0 to 95
-  CSCCFEBDataWord *timeSample(int index) const { return (CSCCFEBDataWord *)(theSamples + index); }
+  const CSCCFEBDataWord *timeSample(int index) const { return (const CSCCFEBDataWord *)(theSamples + index); }
 
   /// layer and element count from one
   // CSCCFEBDataWord * timeSample(int layer, int channel) const;
 
   /// !!! Important change. Use isDCFEB flag in user code to distinguish between CFEB and DCFEB
   /// !!! Use CSCCFEBData::isDCFEB() function to get this flag from CSCCFEBData object
-  CSCCFEBDataWord *timeSample(int layer, int channel, bool isDCFEB = false) const;
+  const CSCCFEBDataWord *timeSample(int layer, int channel, bool isDCFEB = false) const;
 
   /// whether we keep 8 or 16 time samples
   bool sixteenSamples() const { /*return scaControllerWord(1).ts_flag;i*/ return timeSample(95)->controllerData; }

@@ -243,7 +243,6 @@ namespace edm {
     bool shouldContinue = worker.checkResultsOfRunWorker(true);
     std::exception_ptr finalException;
     if (iException) {
-      shouldContinue = false;
       std::unique_ptr<cms::Exception> pEx;
       try {
         std::rethrow_exception(*iException);

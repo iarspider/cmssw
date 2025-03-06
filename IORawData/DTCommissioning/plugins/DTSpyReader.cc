@@ -123,7 +123,7 @@ int DTSpyReader::fillRawData(Event& e,
        reinterpret_cast<unsigned char*>(&eventData[0]) + eventDataSize,
        fedRawData.data());
 
-  mySpy->setlastPointer((char*)rawDTData32);
+  mySpy->setlastPointer((const char*)rawDTData32);
 
   return true;
 }

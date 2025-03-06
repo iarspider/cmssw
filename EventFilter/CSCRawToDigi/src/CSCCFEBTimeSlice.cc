@@ -29,7 +29,7 @@ CSCCFEBSCAControllerWord::CSCCFEBSCAControllerWord(unsigned short frame)
   memcpy(this, &frame, 2);
 }
 
-CSCCFEBDataWord *CSCCFEBTimeSlice::timeSample(int layer, int channel, bool isDCFEB) const {
+const CSCCFEBDataWord *CSCCFEBTimeSlice::timeSample(int layer, int channel, bool isDCFEB) const {
   assert(layer >= CSCDetId::minLayerId());
   assert(layer <= CSCDetId::maxLayerId());
   assert(channel >= 1 && channel <= 16);

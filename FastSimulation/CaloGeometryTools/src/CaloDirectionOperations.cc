@@ -12,7 +12,8 @@ CaloDirection CaloDirectionOperations::add2d(const CaloDirection& dir1, const Ca
 
 CaloDirection CaloDirectionOperations::Side(unsigned i) {
   constexpr CaloDirection sides[6] = {NORTH, EAST, SOUTH, WEST, UP, DOWN};
-  //  if(i<0||i>5) return DOWN;
+  if (i < 0 || i > 5)
+    return DOWN;
   return sides[i];
 }
 

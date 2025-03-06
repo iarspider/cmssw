@@ -185,7 +185,7 @@ uint64_t DTDDUFileReader::dmaUnpack(bool& isData, int& nread) {
 
   uint32_t data[2] = {0, 0};
   // adjust 4 32-bits words  into 2 32-bits words
-  data[0] |= td[3] & 0x3ffff;
+  [[clang::suppress]] data[0] |= td[3] & 0x3ffff;
   data[0] |= (td[2] << 18) & 0xfffc0000;
   data[1] |= (td[2] >> 14) & 0x0f;
   data[1] |= (td[1] << 4) & 0x3ffff0;

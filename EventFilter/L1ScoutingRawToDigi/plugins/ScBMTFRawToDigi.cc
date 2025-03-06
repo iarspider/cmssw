@@ -61,7 +61,7 @@ void ScBMTFRawToDigi::unpackOrbit(const unsigned char* buf, size_t len, int sdsI
   while (pos < len) {
     assert(pos + 4 <= len);
 
-    bmtf::block* bl = (bmtf::block*)(buf + pos);
+    bmtf::block* bl = (const bmtf::block*)(buf + pos);
 
     unsigned bx = bl->bx;
     unsigned orbit = (bl->orbit) & 0x7FFFFFFF;

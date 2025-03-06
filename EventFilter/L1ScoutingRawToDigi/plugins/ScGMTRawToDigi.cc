@@ -56,7 +56,7 @@ void ScGMTRawToDigi::unpackOrbit(const unsigned char* buf, size_t len) {
     assert(pos + 4 <= len);
 
     // get BX header
-    uint32_t header = *((uint32_t*)(buf + pos));
+    const uint32_t header = *((const uint32_t*)(buf + pos));
     pos += 4;
     // count mA and mB
     uint32_t mAcount = (header & header_masks::mAcount) >> header_shifts::mAcount;
@@ -84,15 +84,6 @@ void ScGMTRawToDigi::unpackOrbit(const unsigned char* buf, size_t len) {
           std::cout << " -> Excluding intermediate muon\n";
         }
         continue;
-      }
-
-      uint32_t index = (bl->mu[i].s >> ugmt::shiftsMuon::index) & ugmt::masksMuon::index;
-      uint32_t ietaextu = (bl->mu[i].f >> ugmt::shiftsMuon::etaext) & ugmt::masksMuon::etaextv;
-      int32_t ietaext;
-      if (((bl->mu[i].f >> ugmt::shiftsMuon::etaext) & ugmt::masksMuon::etaexts) != 0) {
-        ietaext = ietaextu -= 256;
-      } else {
-        ietaext = ietaextu;
       }
 
       // extract pt and quality and apply cut if required

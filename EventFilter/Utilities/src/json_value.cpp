@@ -1008,8 +1008,9 @@ namespace jsoncollector {
     bool Value::isObject() const { return type_ == nullValue || type_ == objectValue; }
 
     void Value::setComment(const char *comment, CommentPlacement placement) {
-      if (!comments_)
-        comments_ = new CommentInfo[numberOfCommentPlacement];
+      if (!comments_) {
+        [[clang::suppress]] comments_ = new CommentInfo[numberOfCommentPlacement];
+      }
       comments_[placement].setComment(comment);
     }
 

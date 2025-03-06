@@ -50,7 +50,7 @@ DetId CaloSubdetectorGeometry::getClosestCell(const GlobalPoint& r) const {
   for (uint32_t i(0); i != m_validIds.size(); ++i) {
     auto cell = getGeometry(m_validIds[i]);
     if (nullptr != cell) {
-      const GlobalPoint& p(cell->getPosition());
+      const GlobalPoint p(cell->getPosition());
       const CCGFloat eta0(p.eta());
       const CCGFloat phi0(p.phi());
       const CCGFloat dR2(reco::deltaR2(eta0, phi0, eta, phi));

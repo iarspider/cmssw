@@ -154,7 +154,7 @@ std::array<double, 4> FixedGridRhoProducerFastjetFromRecHit::getHitP4(const DetI
                                                                       const double hitE,
                                                                       const CaloGeometry &caloGeometry) const {
   const CaloSubdetectorGeometry *subDetGeom = caloGeometry.getSubdetectorGeometry(detId);
-  const auto &gpPos = subDetGeom->getGeometry(detId)->repPos();
+  const auto gpPos = subDetGeom->getGeometry(detId)->repPos();
   const double thispt = hitE / cosh(gpPos.eta());
   const double thispx = thispt * cos(gpPos.phi());
   const double thispy = thispt * sin(gpPos.phi());

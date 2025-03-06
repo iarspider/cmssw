@@ -179,7 +179,7 @@ inline sim::sim(TTree *tree) {
     std::cout << "sim::sim: tree = 0" << std::endl;
     TFile *f = (TFile *)gROOT->GetListOfFiles()->FindObject("protons_150gev.root");
     if (!f) {
-      f = new TFile("protons_150gev.root");
+      [[clang::suppress]] f = new TFile("protons_150gev.root");
     }
     tree = (TTree *)gDirectory->Get("sim");
   }

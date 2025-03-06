@@ -236,7 +236,7 @@ DetId EcalEndcapGeometry::getClosestCell(const GlobalPoint& r) const {
       // compute the distance of the point with respect of the 4 crystal lateral planes
 
       if (nullptr != getGeometry(mycellID)) {
-        const GlobalPoint& myPosition = getGeometry(mycellID)->getPosition();
+        const GlobalPoint myPosition = getGeometry(mycellID)->getPosition();
 
         x = myPosition.x();
         y = myPosition.y();

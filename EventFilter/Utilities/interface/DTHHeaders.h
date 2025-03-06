@@ -50,7 +50,7 @@ namespace evf {
     uint64_t totalSize() const { return uint64_t(packed_word_count_) << DTH_WORD_NUM_BYTES_SHIFT; }
     uint64_t payloadSizeBytes() const { return totalSize() - sizeof(DTHOrbitHeader_v1); }
     uint64_t headerSize() const { return sizeof(DTHOrbitHeader_v1); }
-    const void* payload() const { return (uint8_t*)this + sizeof(DTHOrbitHeader_v1); }
+    const void* payload() const { return (const uint8_t*)this + sizeof(DTHOrbitHeader_v1); }
     bool verifyMarker() const {
       for (size_t i = 0; i < DTHOrbitMarker.size(); i++) {
         if (marker_[i] != DTHOrbitMarker[i])
@@ -90,7 +90,7 @@ namespace evf {
     uint64_t payloadSizeBytes() const { return uint64_t(payload_word_count_) << DTH_WORD_NUM_BYTES_SHIFT; }
     uint16_t flags() const { return flags_.all_; }
     uint16_t crc() const { return crc_; }
-    const void* payload() const { return (uint8_t*)this - payloadSizeBytes(); }
+    const void* payload() const { return (const uint8_t*)this - payloadSizeBytes(); }
     bool verifyMarker() const {
       for (size_t i = 0; i < DTHFragmentTrailerMarker.size(); i++) {
         if (marker_[i] != DTHFragmentTrailerMarker[i])

@@ -258,7 +258,7 @@ namespace spu {
     for (n = 0; n < 512; ++n) {
       if (n < 148 || n > 155)
         /* Standard tar checksum adds unsigned bytes. */
-        u += ((unsigned char *)p)[n];
+        u += ((const unsigned char *)p)[n];
       else
         u += 0x20;
     }

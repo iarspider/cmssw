@@ -220,9 +220,9 @@ bool SherpaHadronizer::initializeForInternalPartons() {
   //initialize Sherpa but only once
   if (!isInitialized) {
     int argc = arguments.size();
-    char *argv[argc];
+    const char *argv[argc];
     for (int l = 0; l < argc; l++)
-      argv[l] = (char *)arguments[l].c_str();
+      argv[l] = (const char *)arguments[l].c_str();
     Generator->InitializeTheRun(argc, argv);
     Generator->InitializeTheEventHandler();
     isInitialized = true;

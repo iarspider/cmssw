@@ -103,7 +103,7 @@ void ScCaloRawToDigi::unpackOrbitFromDMA(edm::Handle<SDSRawDataCollection>& Scou
   while (pos < len) {
     assert(pos + sizeof(demux::dmaBlock) <= len);
 
-    demux::dmaBlock* bl = (demux::dmaBlock*)(buf + pos);
+    const demux::dmaBlock* bl = (const demux::dmaBlock*)(buf + pos);
     pos += sizeof(demux::dmaBlock);
 
     assert(pos <= len);
@@ -185,7 +185,7 @@ void ScCaloRawToDigi::unpackOrbitFromTCP(const unsigned char* buf, size_t len, C
 
     // unpack calo sums block
     if (dataType == CaloObjectType::EtSum) {
-      demux::caloSumTcpBlock* bl = (demux::caloSumTcpBlock*)(buf + pos);
+      const demux::caloSumTcpBlock* bl = (const demux::caloSumTcpBlock*)(buf + pos);
       pos += sizeof(demux::caloSumTcpBlock);
       assert(pos <= len);
       if (debug_)
@@ -193,7 +193,7 @@ void ScCaloRawToDigi::unpackOrbitFromTCP(const unsigned char* buf, size_t len, C
       unpackEtSums(bl->sum, bl->bx);
     } else {
       // unpack jet/eg/tau
-      demux::caloObjTcpBlock* bl = (demux::caloObjTcpBlock*)(buf + pos);
+      const demux::caloObjTcpBlock* bl = (const demux::caloObjTcpBlock*)(buf + pos);
       int nObj = (bl->header) & 0xff;
       pos += 12 + nObj * 4;
 
